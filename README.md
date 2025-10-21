@@ -33,6 +33,15 @@ collection.add(exampleObject);
 
 Adds elem to VECollection.
 
+#### addAll(elemCollection: VECollection<T>): void 
+
+```TypeScript
+const secondCollection = new VECollection<ExampleObject>([{"primitiveField": "secondPrimitiveField"}]);
+collection.addAll(secondCollection);
+```
+
+Adds each elem in elemCollection to the calling VECollection.
+
 #### remove(elem: T): boolean
 
 ```TypeScript
@@ -70,6 +79,16 @@ const mappedCollection = collection.map(
 ```
 
 Returns a VECollection containing the results of mapFn applied to the current collection's elems - in the same order as said collection already had.
+
+#### forEach(forEachFn: (_: T) => void): void
+
+```TypeScript
+collection.forEach(
+    ({primitiveField}) => console.log(primitiveField);
+);
+```
+
+Executes forEachFn on each collection elem, in the collection's current order.
 
 #### filter(filterFn: (_: T) => boolean): VECollection<T>
 

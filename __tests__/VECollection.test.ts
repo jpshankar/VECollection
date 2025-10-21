@@ -49,6 +49,27 @@ describe("VECollection.add", () => {
   });
 });
 
+describe("VECollection.addAll", () => {
+  test("should add the provided elements without any issues", () => {
+    const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject]);
+    expect(collection.size()).toBe(1);
+
+    const secondJustPrimitives = {
+        primitiveField: "secondJustPrimitives"
+    }
+
+    const thirdJustPrimitives = {
+        primitiveField: "secondJustPrimitives"
+    }
+
+    const secondCollection = new VECollection<JustPrimitivesObject>([secondJustPrimitives, thirdJustPrimitives]);
+    expect(secondCollection.size()).toBe(2);
+
+    collection.addAll(secondCollection);
+    expect(collection.size()).toBe(3);
+  });
+});
+
 describe("VECollection.remove", () => {
   test("should remove an object with only primitives", () => {
     const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject]);
@@ -160,6 +181,34 @@ describe("VECollection.map", () => {
         );
         
         expect(mappedCollection.isEmpty()).toBe(true);
+    });
+});
+
+describe("VECollection.forEach", () => {
+    test("should execute forEachFn without any issues", () => {
+        const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject]);
+
+        expect(
+            () =>
+                collection.forEach(
+                    ({primitiveField}) => {
+                        console.log(primitiveField);
+                    }
+                )
+        ).not.toThrow();
+    });
+
+    test("should handle an empty VECollection without any issues", () => {
+        const collection = new VECollection<JustPrimitivesObject>();
+
+        expect(
+            () =>
+                collection.forEach(
+                    ({primitiveField}) => {
+                        console.log(primitiveField);
+                    }
+                )
+        ).not.toThrow();
     });
 });
 

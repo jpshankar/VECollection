@@ -78,6 +78,14 @@ export default class VECollection<T extends object> {
         this.collection.push(elem);
     }
 
+    addAll(elemCollection: VECollection<T>): void {
+        elemCollection.forEach(
+            (collectionElem) => {
+                this.collection.push(collectionElem);
+            }
+        );
+    }
+
     private removeElemAtInd(elemIndex: number): boolean {
         const removalResult = this.collection.splice(elemIndex, 1);
         return removalResult.length > 0;
@@ -113,6 +121,10 @@ export default class VECollection<T extends object> {
     map<U extends object>(mapFn: (_: T) => U): VECollection<U> {
         const mapped = this.collection.map(mapFn);
         return new VECollection<U>(mapped);
+    }
+
+    forEach(forEachFn: (_: T) => void): void {
+        this.collection.forEach(forEachFn);
     }
 
     filter(filterFn: (_: T) => boolean): VECollection<T> {

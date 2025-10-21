@@ -1,6 +1,6 @@
 {
   "name": "vecollection",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "scripts": {
     "prepublishOnly": "npm run tsc",
@@ -17,7 +17,7 @@
     "ts-jest": "^29.4.5",
     "typescript": "^5.9.3"
   },
-  "main": "./lib/cjs/index.js",
+  "main": "./lib/cjs/VECollection.js",
   "module": "./lib/esm/index.js",
   "files": [
     "lib/"
