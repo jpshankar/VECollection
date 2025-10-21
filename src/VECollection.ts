@@ -92,7 +92,7 @@ export default class VECollection<T extends object> {
         }
     }
 
-    findAndRemoveFirst(findFn: (_: T) => boolean): boolean {
+    findAndRemoveFirstOccurrence(findFn: (_: T) => boolean): boolean {
         const elemIndex = this.collection.findIndex(findFn);
         if (elemIndex > -1) {
             return this.removeElemAtInd(elemIndex);
@@ -101,7 +101,7 @@ export default class VECollection<T extends object> {
         }
     }
 
-    returnIfFound(findFn: (_: T) => boolean): T | undefined {
+    returnFirstOccurrenceIfFound(findFn: (_: T) => boolean): T | undefined {
         const elemIndex = this.collection.findIndex(findFn);
         if (elemIndex > -1) {
             return this.collection[elemIndex];

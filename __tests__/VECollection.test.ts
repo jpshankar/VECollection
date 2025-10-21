@@ -77,7 +77,7 @@ describe("VECollection.remove", () => {
   });
 });
 
-describe("VECollection.findAndRemoveFirst", () => {
+describe("VECollection.findAndRemoveFirstOccurrence", () => {
     test("should remove the first value that satisfies the criteria", () => {
         const secondJustPrimitives: JustPrimitivesObject = {
             primitiveField: "secondJustPrimitives"
@@ -90,7 +90,7 @@ describe("VECollection.findAndRemoveFirst", () => {
         const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject, secondJustPrimitives, thirdJustPrimitives]);
         expect(collection.size()).toBe(3);
 
-        collection.findAndRemoveFirst(({primitiveField}) => !primitiveField.startsWith("third"));
+        collection.findAndRemoveFirstOccurrence(({primitiveField}) => !primitiveField.startsWith("third"));
         expect(collection.size()).toBe(2);
     });
 
@@ -106,19 +106,19 @@ describe("VECollection.findAndRemoveFirst", () => {
         const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject, secondJustPrimitives, thirdJustPrimitives]);
         expect(collection.size()).toBe(3);
 
-        collection.findAndRemoveFirst(({primitiveField}) => primitiveField.startsWith("fourth"));
+        collection.findAndRemoveFirstOccurrence(({primitiveField}) => primitiveField.startsWith("fourth"));
         expect(collection.size()).toBe(3);
     });
 });
 
-describe("VECollection.returnIfFound", () => {
+describe("VECollection.returnFirstOccurrenceIfFound", () => {
     test("should return the first result matching the criteria", () => {
         const secondJustPrimitives: JustPrimitivesObject = {
             primitiveField: "justPrimitivesII"
         }
 
         const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject, secondJustPrimitives]);
-        const firstFound = collection.returnIfFound(({primitiveField}) => primitiveField.startsWith("just"));
+        const firstFound = collection.returnFirstOccurrenceIfFound(({primitiveField}) => primitiveField.startsWith("just"));
 
         expect(firstFound?.primitiveField).toBe(testPrimitivesObject.primitiveField);
     });
@@ -129,7 +129,7 @@ describe("VECollection.returnIfFound", () => {
         }
 
         const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject, secondJustPrimitives]);
-        const firstFound = collection.returnIfFound(({primitiveField}) => !primitiveField.startsWith("just"));
+        const firstFound = collection.returnFirstOccurrenceIfFound(({primitiveField}) => !primitiveField.startsWith("just"));
 
         expect(firstFound).toBeFalsy();
     });
