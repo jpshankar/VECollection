@@ -86,6 +86,10 @@ export default class VECollection<T extends object> {
         );
     }
 
+    copy(): VECollection<T> {
+        return new VECollection<T>(this.collection);
+    }
+
     private removeElemAtInd(elemIndex: number): boolean {
         const removalResult = this.collection.splice(elemIndex, 1);
         return removalResult.length > 0;

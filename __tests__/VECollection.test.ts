@@ -70,6 +70,19 @@ describe("VECollection.addAll", () => {
   });
 });
 
+describe("VECollection.copy", () => {
+  test("should create a copy without any issues", () => {
+    const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject]);
+    expect(collection.size()).toBe(1);
+
+    const copyCollection = collection.copy();
+    
+    expect(copyCollection.size()).toBe(1);
+    // Verify that it's a fresh copy, not the same reference.
+    expect(copyCollection).not.toBe(collection);
+  });
+});
+
 describe("VECollection.remove", () => {
   test("should remove an object with only primitives", () => {
     const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject]);
