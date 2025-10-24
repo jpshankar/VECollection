@@ -19,7 +19,7 @@ const collection = new VECollection<ExampleObject>();
 const collection = new VECollection<ExampleObject>();
 ..
 const exampleObject = {"exampleField": "exampleField"};
-const array = [exampleField];
+const array = new Set<ExampleObject>([exampleField]);
 const collection = new VECollection<ExampleObject>(array);
 ```
 

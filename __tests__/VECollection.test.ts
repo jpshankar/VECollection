@@ -26,7 +26,7 @@ describe("VECollection constructor", () => {
   });
 
   test("should construct a collection when an Array is provided", () => {
-    const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject]);
+    const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject]));
 
     expect(collection.isEmpty()).toBe(false);
     expect(collection.isNonEmpty()).toBe(true);
@@ -37,7 +37,7 @@ describe("VECollection constructor", () => {
 
 describe("VECollection.add", () => {
   test("should add the provided element without any issues", () => {
-    const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject]);
+    const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject]));
     expect(collection.size()).toBe(1);
 
     const secondJustPrimitives = {
@@ -47,11 +47,26 @@ describe("VECollection.add", () => {
     collection.add(secondJustPrimitives);
     expect(collection.size()).toBe(2);
   });
+
+  test("should not add the same element twice", () => {
+    const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject]));
+    expect(collection.size()).toBe(1);
+
+    const secondJustPrimitives = {
+        primitiveField: "secondJustPrimitives"
+    }
+
+    collection.add(secondJustPrimitives);
+    expect(collection.size()).toBe(2);
+
+    collection.add(secondJustPrimitives);
+    expect(collection.size()).toBe(2);
+  });
 });
 
 describe("VECollection.addAll", () => {
   test("should add the provided elements without any issues", () => {
-    const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject]);
+    const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject]));
     expect(collection.size()).toBe(1);
 
     const secondJustPrimitives = {
@@ -62,8 +77,30 @@ describe("VECollection.addAll", () => {
         primitiveField: "secondJustPrimitives"
     }
 
-    const secondCollection = new VECollection<JustPrimitivesObject>([secondJustPrimitives, thirdJustPrimitives]);
+    const secondCollection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([secondJustPrimitives, thirdJustPrimitives]));
     expect(secondCollection.size()).toBe(2);
+
+    collection.addAll(secondCollection);
+    expect(collection.size()).toBe(3);
+  });
+
+  test("should not add the same elements twice", () => {
+    const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject]));
+    expect(collection.size()).toBe(1);
+
+    const secondJustPrimitives = {
+        primitiveField: "secondJustPrimitives"
+    }
+
+    const thirdJustPrimitives = {
+        primitiveField: "secondJustPrimitives"
+    }
+
+    const secondCollection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([secondJustPrimitives, thirdJustPrimitives]));
+    expect(secondCollection.size()).toBe(2);
+
+    collection.addAll(secondCollection);
+    expect(collection.size()).toBe(3);
 
     collection.addAll(secondCollection);
     expect(collection.size()).toBe(3);
@@ -72,7 +109,7 @@ describe("VECollection.addAll", () => {
 
 describe("VECollection.copy", () => {
   test("should create a copy without any issues", () => {
-    const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject]);
+    const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject]));
     expect(collection.size()).toBe(1);
 
     const copyCollection = collection.copy();
@@ -85,7 +122,7 @@ describe("VECollection.copy", () => {
 
 describe("VECollection.remove", () => {
   test("should remove an object with only primitives", () => {
-    const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject]);
+    const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject]));
     expect(collection.isNonEmpty()).toBe(true);
 
     expect(collection.remove(testPrimitivesObject)).toBe(true);
@@ -93,7 +130,7 @@ describe("VECollection.remove", () => {
   });
 
   test("should remove an object itself containing objects", () => {
-    const collection = new VECollection<NotJustPrimitivesObject>([testNotJustPrimitivesObject]);
+    const collection = new VECollection<NotJustPrimitivesObject>(new Set<NotJustPrimitivesObject>([testNotJustPrimitivesObject]));
     expect(collection.isNonEmpty()).toBe(true);
 
     expect(collection.remove(testNotJustPrimitivesObject)).toBe(true);
@@ -101,7 +138,7 @@ describe("VECollection.remove", () => {
   });
 
   test("should handle the specified object-to-remove not being there", () => {
-    const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject]);
+    const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject]));
     expect(collection.isNonEmpty()).toBe(true);
 
     expect(collection.remove(testNotJustPrimitivesObject)).toBe(false);
@@ -121,7 +158,7 @@ describe("VECollection.findAndRemoveFirstOccurrence", () => {
             primitiveField: "thirdJustPrimitives"
         }
 
-        const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject, secondJustPrimitives, thirdJustPrimitives]);
+        const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject, secondJustPrimitives, thirdJustPrimitives]));
         expect(collection.size()).toBe(3);
 
         collection.findAndRemoveFirstOccurrence(({primitiveField}) => !primitiveField.startsWith("third"));
@@ -137,7 +174,7 @@ describe("VECollection.findAndRemoveFirstOccurrence", () => {
             primitiveField: "thirdJustPrimitives"
         }
 
-        const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject, secondJustPrimitives, thirdJustPrimitives]);
+        const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject, secondJustPrimitives, thirdJustPrimitives]));
         expect(collection.size()).toBe(3);
 
         collection.findAndRemoveFirstOccurrence(({primitiveField}) => primitiveField.startsWith("fourth"));
@@ -151,7 +188,7 @@ describe("VECollection.returnFirstOccurrenceIfFound", () => {
             primitiveField: "justPrimitivesII"
         }
 
-        const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject, secondJustPrimitives]);
+        const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject, secondJustPrimitives]));
         const firstFound = collection.returnFirstOccurrenceIfFound(({primitiveField}) => primitiveField.startsWith("just"));
 
         expect(firstFound?.primitiveField).toBe(testPrimitivesObject.primitiveField);
@@ -162,7 +199,7 @@ describe("VECollection.returnFirstOccurrenceIfFound", () => {
             primitiveField: "justPrimitivesII"
         }
 
-        const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject, secondJustPrimitives]);
+        const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject, secondJustPrimitives]));
         const firstFound = collection.returnFirstOccurrenceIfFound(({primitiveField}) => !primitiveField.startsWith("just"));
 
         expect(firstFound).toBeFalsy();
@@ -171,7 +208,7 @@ describe("VECollection.returnFirstOccurrenceIfFound", () => {
 
 describe("VECollection.map", () => {
     test("should execute mapFn without any issues", () => {
-        const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject]);
+        const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject]));
         expect(collection.size()).toBe(1);
 
         const mappedCollection = collection.map(
@@ -199,7 +236,7 @@ describe("VECollection.map", () => {
 
 describe("VECollection.forEach", () => {
     test("should execute forEachFn without any issues", () => {
-        const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject]);
+        const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject]));
 
         expect(
             () =>
@@ -235,7 +272,7 @@ describe("VECollection.filter", () => {
             primitiveField: "thirdJustPrimitives"
         }
 
-        const collection = new VECollection<JustPrimitivesObject>([testPrimitivesObject, secondJustPrimitives, thirdJustPrimitives]);
+        const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject, secondJustPrimitives, thirdJustPrimitives]));
         expect(collection.size()).toBe(3);
 
         const filteredCollection = collection.filter(({primitiveField}) => !primitiveField.startsWith("third"));

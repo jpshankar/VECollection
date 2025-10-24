@@ -1,14 +1,10 @@
 type ObjectOrPrimitive = string | undefined;
 
 export default class VECollection<T extends object> {
-    private collection: T[];
+    private collection: Set<T>;
 
-    constructor(array?: Array<T>) {
-        if (array) {
-            this.collection = array;
-        } else {
-            this.collection = new Array<T>();
-        }
+    constructor(set: Set<T> = new Set<T>()) {
+        this.collection = set;
     }
 
     private isObjectForValueEqualityCheck<U>(maybeValidObject: U): boolean {
@@ -74,14 +70,22 @@ export default class VECollection<T extends object> {
         }
     }
 
+    private elemInSet(elem: T): boolean {
+        return Array.from(this.collection).findIndex((collectionElem) => this.valueEqualityCheck(elem, collectionElem)) > -1;
+    }
+
     add(elem: T): void {
-        this.collection.push(elem);
+        if (!this.elemInSet(elem)) {
+            this.collection.add(elem);
+        }
     }
 
     addAll(elemCollection: VECollection<T>): void {
-        elemCollection.forEach(
-            (collectionElem) => {
-                this.collection.push(collectionElem);
+        const addableElems = elemCollection.filter((collectionElem) => !this.elemInSet(collectionElem));
+        
+        addableElems.forEach(
+            (addableElem) => {
+                this.collection.add(addableElem);
             }
         );
     }
@@ -90,41 +94,46 @@ export default class VECollection<T extends object> {
         return new VECollection<T>(this.collection);
     }
 
-    private removeElemAtInd(elemIndex: number): boolean {
-        const removalResult = this.collection.splice(elemIndex, 1);
-        return removalResult.length > 0;
-    }
-
     remove(elem: T): boolean {
-        const elemIndex = this.collection.findIndex((collectionElem) => this.valueEqualityCheck(elem, collectionElem));
+        const collectionArray = Array.from(this.collection);
+        const elemIndex = collectionArray.findIndex((collectionElem) => this.valueEqualityCheck(elem, collectionElem));
+
         if (elemIndex > -1) {
-            return this.removeElemAtInd(elemIndex);
+            const elemRemovedCollectionArray = collectionArray.slice(0, elemIndex).concat(collectionArray.slice(elemIndex + 1, collectionArray.length));
+            this.collection = new Set<T>(elemRemovedCollectionArray);
+            return true;
         } else {
             return false;
         }
     }
 
     findAndRemoveFirstOccurrence(findFn: (_: T) => boolean): boolean {
-        const elemIndex = this.collection.findIndex(findFn);
+        const collectionArray = Array.from(this.collection);
+        const elemIndex = collectionArray.findIndex((collectionElem) => findFn(collectionElem));
+
         if (elemIndex > -1) {
-            return this.removeElemAtInd(elemIndex);
+            const elemRemovedCollectionArray = collectionArray.slice(0, elemIndex).concat(collectionArray.slice(elemIndex + 1, collectionArray.length));
+            this.collection = new Set<T>(elemRemovedCollectionArray);
+            return true;
         } else {
             return false;
         }
     }
 
     returnFirstOccurrenceIfFound(findFn: (_: T) => boolean): T | undefined {
-        const elemIndex = this.collection.findIndex(findFn);
+        const collectionArray = Array.from(this.collection);
+        const elemIndex = collectionArray.findIndex((collectionElem) => findFn(collectionElem));
+
         if (elemIndex > -1) {
-            return this.collection[elemIndex];
+            return collectionArray[elemIndex];
         } else {
             return undefined;
         }
     }
 
     map<U extends object>(mapFn: (_: T) => U): VECollection<U> {
-        const mapped = this.collection.map(mapFn);
-        return new VECollection<U>(mapped);
+        const mapped = Array.from(this.collection).map(mapFn);
+        return new VECollection<U>(new Set<U>(mapped));
     }
 
     forEach(forEachFn: (_: T) => void): void {
@@ -132,12 +141,12 @@ export default class VECollection<T extends object> {
     }
 
     filter(filterFn: (_: T) => boolean): VECollection<T> {
-        const filtered = this.collection.filter(filterFn);
-        return new VECollection<T>(filtered);
+        const filtered = Array.from(this.collection).filter(filterFn);
+        return new VECollection<T>(new Set<T>(filtered));
     }
 
     isEmpty(): boolean {
-        return this.collection.length === 0;
+        return this.collection.size === 0;
     }
 
     isNonEmpty(): boolean {
@@ -145,6 +154,6 @@ export default class VECollection<T extends object> {
     }
 
     size(): number {
-        return this.collection.length;
+        return this.collection.size;
     }
 }
