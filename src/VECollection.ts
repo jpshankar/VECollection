@@ -107,6 +107,10 @@ export default class VECollection<T extends object> {
         }
     }
 
+    clear(): void {
+        this.collection.clear();
+    }
+
     findAndRemoveFirstOccurrence(findFn: (_: T) => boolean): boolean {
         const collectionArray = Array.from(this.collection);
         const elemIndex = collectionArray.findIndex((collectionElem) => findFn(collectionElem));

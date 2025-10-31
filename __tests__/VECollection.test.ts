@@ -148,6 +148,16 @@ describe("VECollection.remove", () => {
   });
 });
 
+describe("VECollection.clear", () => {
+  test("should clear the set", () => {
+    const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject]));
+    expect(collection.isNonEmpty()).toBe(true);
+
+    collection.clear();
+    expect(collection.isEmpty()).toBe(true);
+  });
+});
+
 describe("VECollection.findAndRemoveFirstOccurrence", () => {
     test("should remove the first value that satisfies the criteria", () => {
         const secondJustPrimitives: JustPrimitivesObject = {
