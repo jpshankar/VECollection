@@ -1,6 +1,6 @@
 {
   "name": "vecollection",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Collection with uniqueness and value equality",
   "scripts": {
     "prepublishOnly": "npm run tsc",

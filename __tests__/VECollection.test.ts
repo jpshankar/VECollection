@@ -297,3 +297,16 @@ describe("VECollection.filter", () => {
         expect(filteredCollection.isEmpty()).toBe(true);
     });
 });
+
+describe("VECollection as iterable", () => {
+    test("should be leveragable by Array.from() without any issues" , () => {
+        const secondJustPrimitives: JustPrimitivesObject = {
+            primitiveField: "secondJustPrimitives"
+        }
+
+        const collection = new VECollection<JustPrimitivesObject>(new Set<JustPrimitivesObject>([testPrimitivesObject, secondJustPrimitives]));
+
+        const array = Array.from(collection);
+        expect(array.length).toBe(2);
+    });
+});

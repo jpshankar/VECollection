@@ -42,6 +42,14 @@ collection.addAll(secondCollection);
 
 Adds each elem in elemCollection to the calling VECollection.
 
+### copy(): VECollection<T>
+
+```TypeScript
+const collectionCopy = collection.copy();
+```
+
+Creates and returns copy-by-value of the calling VECollection.
+
 #### remove(elem: T): boolean
 
 ```TypeScript
@@ -49,6 +57,14 @@ collection.remove(exampleObject);
 ```
 
 Returns true if we found (and subsequently removed) an element that satisfies deep equality when elem - and false if we didn't.
+
+### clear(): void
+
+```TypeScript
+collection.clear();
+```
+
+Empties out the calling VECollection - done in-place.
 
 #### findAndRemoveFirstOccurrence(findFn: (_: T) => boolean): boolean
 
@@ -129,3 +145,11 @@ size() = number of elems in collection.
 VECollection.valueEqualityCheck() splits each object into primitives and non-primitives - it verifies the equality of all primitives, then recursively calls valueEqualityCheck() on each non-primitive. 
 
 Recursion will terminate when it reaches object fields that are " all primitives, no nested objects ".
+
+# Any operation requiring ordering or indexing..
+
+.. can be done by transforming it into an Array via the collection's iterable quality.
+
+```TypeScript
+const array = Array.from(collection);
+```

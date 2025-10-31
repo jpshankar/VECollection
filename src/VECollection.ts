@@ -134,7 +134,7 @@ export default class VECollection<T extends object> {
             return undefined;
         }
     }
-
+    
     map<U extends object>(mapFn: (_: T) => U): VECollection<U> {
         const mapped = Array.from(this.collection).map(mapFn);
         return new VECollection<U>(new Set<U>(mapped));
@@ -159,5 +159,11 @@ export default class VECollection<T extends object> {
 
     size(): number {
         return this.collection.size;
+    }
+
+    *[Symbol.iterator]() {
+        for (const elem of this.collection) {
+            yield elem;
+        }
     }
 }
